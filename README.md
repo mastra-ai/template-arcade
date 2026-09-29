@@ -19,7 +19,7 @@ Mastra has built-in [tool approvals](https://mastra.ai/docs/agents/human-in-the-
 - **[ngrok](https://ngrok.com/docs/universal-gateway/domains/) or a [hosted app](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md)**: provides a public HTTPS address so Arcade can reach the app's sign-in endpoints and policy checks. Another tunnel works too.
 - **[Slack workspace](https://docs.arcade.dev/en/references/auth-providers/slack) with two people**: one requests approval and the other approves. You'll need their Slack email addresses. With Arcade's built-in Slack app, the requester also needs membership in your Arcade project.
 
-You'll supply two API keys and a public hostname. Setup generates the remaining required configuration; optional settings have defaults.
+See the [configuration docs](https://github.com/mastra-ai/template-arcade/blob/main/docs/configuration.md) for advanced options.
 
 ## Quickstart 🚀
 

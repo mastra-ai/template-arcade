@@ -4,7 +4,7 @@ What the app reads from `.env`, how it tells you what is missing, and how to put
 
 ## Configuration and readiness
 
-`.env.example` documents every variable in place, in three blocks: the three you fill in, the ones `bun run setup-arcade` writes, and optional overrides with their defaults.
+`.env.example` documents every variable in three blocks. You supply two API keys (`ANTHROPIC_API_KEY` and `ARCADE_API_KEY`) and a public hostname (`APP_PUBLIC_HOST`). Setup generates the remaining required configuration with `bun run setup-arcade`. The third block contains optional overrides with defaults.
 
 - **`/health` names what is missing.** It answers HTTP 200 either way, with `status` `ok` or `degraded` and one field per capability, including `signin`, `gateway`, `verifier`, `agent`, `panel_stream`, `policy`, `loans`, `identity` and `reset`. A fresh clone with nothing filled in answers `degraded` and names `signin`, `gateway`, `verifier` and `agent` as `missing`. Nothing falls back silently. Arcade's own health check is a different path, `/hooks/health`, with its own `healthy|degraded|unhealthy` vocabulary.
 - **The Arcade project.** `bun run setup-arcade` registers the hooks, and checks for the gateway you create, in the Arcade CLI's active org and project, as `arcade whoami` shows them, and stops before writing anything if `ARCADE_API_KEY` belongs to another project. To use a different project, set `ARCADE_ORG_ID` and `ARCADE_PROJECT_ID` in `.env`. With no CLI login and neither variable, it prints the hooks and the gateway as dashboard forms instead.
