@@ -168,9 +168,9 @@ describe("the FAQ the docs point at", () => {
     expect(DOMAIN_SWAP).not.toContain("each loan officer who requests an approval has to be invited");
   });
 
-  test("the README keeps no FAQ of its own, and links the page from Further reading", () => {
+  test("the README keeps no FAQ of its own, and links the page from Documentation", () => {
     expect(section(README, "FAQ")).toBe("");
-    expect(section(README, "Further reading")).toContain("](https://github.com/mastra-ai/template-arcade/blob/main/docs/faq.md)");
+    expect(section(README, "Documentation")).toContain("](https://github.com/mastra-ai/template-arcade/blob/main/docs/faq.md)");
   });
 });
 

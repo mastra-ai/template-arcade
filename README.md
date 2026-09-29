@@ -80,12 +80,13 @@ See the [configuration docs](https://github.com/mastra-ai/template-arcade/blob/m
 - Ask your coding agent: “Adapt this to equipment-lease approvals. Explore the code and propose a plan before making changes.”
 - Change an officer's limit with `bun run users set-clearance <email> <amount>`, or follow the [domain-swap guide](https://github.com/mastra-ai/template-arcade/blob/main/docs/DOMAIN-SWAP.md) to replace the loan data and tools.
 
-## Further reading
+## Documentation
 
-- [Setup and walkthrough](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md): web chat, the audit panel, and additional users.
-- [Configuration](https://github.com/mastra-ai/template-arcade/blob/main/docs/configuration.md): environment settings and resetting the demo.
-- [Architecture](https://github.com/mastra-ai/template-arcade/blob/main/docs/architecture.md): tools, policies, and identity.
-- [FAQ](https://github.com/mastra-ai/template-arcade/blob/main/docs/faq.md) and [deployment](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md): troubleshooting and hosting.
+- [Setup and walkthrough](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md) - Web chat, the audit panel, and additional users.
+- [Configuration](https://github.com/mastra-ai/template-arcade/blob/main/docs/configuration.md) - Environment settings and resetting the demo.
+- [Architecture](https://github.com/mastra-ai/template-arcade/blob/main/docs/architecture.md) - Tools, policies, and identity.
+- [FAQ](https://github.com/mastra-ai/template-arcade/blob/main/docs/faq.md)
+- [Deployment](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md)
 
 ## About Mastra templates
 

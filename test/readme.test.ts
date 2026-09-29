@@ -17,7 +17,7 @@ describe("template README", () => {
     ]);
     expect(headings(README).filter(({ level }) => level === 2).map(({ title }) => title)).toEqual([
       "Why we built this", "Prerequisites", "Quickstart 🚀", "Try it out",
-      "Customization", "Further reading", "About Mastra templates",
+      "Customization", "Documentation", "About Mastra templates",
     ]);
     expect(README).not.toContain("CLOUDINARY_DEMO_VIDEO_URL_REQUIRED");
     expect(README).not.toContain("—");
