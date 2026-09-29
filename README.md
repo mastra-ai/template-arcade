@@ -12,12 +12,12 @@ Mastra has built-in [tool approvals](https://mastra.ai/docs/agents/human-in-the-
 
 ## Prerequisites
 
-- **[Anthropic API key](https://platform.claude.com/settings/keys)**: `ANTHROPIC_API_KEY`, the credential for the assistant's model.
-- **[Arcade project](https://api.arcade.dev/dashboard/api-keys)**: `ARCADE_API_KEY`, a key for the same project used by the [Arcade command-line tool](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md#prerequisites). Its installer uses [uv](https://docs.astral.sh/uv/), a Python package manager.
-- **[Public app address](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md)**: `APP_PUBLIC_HOST`, the app's public hostname without `https://`. Arcade Cloud needs access to the app through a hosted deployment or a local tunnel; ngrok is optional.
-- **[Slack accounts](https://docs.arcade.dev/en/references/auth-providers/slack)**: two people in one workspace, using their Slack email addresses. Arcade's built-in Slack app requires you to invite the requesting officer to your Arcade project. [Account details](https://github.com/mastra-ai/template-arcade/blob/main/docs/app-users-and-arcade-accounts.md).
-
-The first block of `.env.example` holds your two keys and public hostname. Setup fills the generated block with app secrets and sign-in configuration. The optional settings have defaults.
+- [Bun](https://bun.sh/docs/installation)
+- [uv](https://docs.astral.sh/uv/), a Python package manager
+- An [Anthropic API key](https://platform.claude.com/settings/keys)
+- An [Arcade account](https://api.arcade.dev/dashboard/api-keys)
+- [ngrok](https://ngrok.com/docs/universal-gateway/domains/) or another public HTTPS hosting option
+- A [Slack workspace](https://docs.arcade.dev/en/references/auth-providers/slack) with two people to try the approval flow
 
 ## Quickstart 🚀
 
@@ -33,7 +33,8 @@ The first block of `.env.example` holds your two keys and public hostname. Setup
    - Run `arcade whoami` to confirm the CLI uses the same project as your API key.
 
 3. **Configure the app**
-   - Run `cp .env.example .env`. Fill in the first block from Prerequisites: your two API keys and public hostname, without `https://`.
+   - Run `cp .env.example .env`. In the first block, set `ANTHROPIC_API_KEY` to your Anthropic key and `ARCADE_API_KEY` to the key from your Arcade project.
+   - Set `APP_PUBLIC_HOST` to your public hostname without `https://`. For ngrok, use your assigned domain. Arcade Cloud needs this address to reach the app through your tunnel or hosted deployment.
    - Leave the generated block blank and keep the optional defaults. Setup writes the app secrets and sign-in configuration for you.
 
 4. **Register the app with Arcade**
@@ -48,6 +49,7 @@ The first block of `.env.example` holds your two keys and public hostname. Setup
    - If setup prints dashboard forms, create the User Source first, then the gateway using that source, then rerun `bun run setup-arcade <APP_PUBLIC_HOST>` to enable the hooks. Follow the printed values and the [dashboard fallback instructions](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md#quickstart-).
 
 6. **Add yourself and an approver**
+   - With Arcade's built-in Slack app, invite the requesting officer to your Arcade project. See [account details](https://github.com/mastra-ai/template-arcade/blob/main/docs/app-users-and-arcade-accounts.md) for the custom Slack app alternative.
    - Use your real Slack email addresses in both commands. “Alice” and “Charlie” are display names for the walkthrough.
    - Run `bun run users add <your-email> --name Alice --role loan_officer --clearance 50000`.
    - Run `bun run users add <approver-email> --name Charlie --role vp_credit --clearance 250000`.
@@ -66,7 +68,6 @@ The first block of `.env.example` holds your two keys and public hostname. Setup
 - **Complete the approval:** Charlie opens the Slack link in a separate browser profile, signs in with his email and generated password, and approves. Resend the request in Studio; the single-use grant permits it. The web chat resumes automatically.
 - **Try self-approval:** before Charlie answers, open the approval link as Alice. The request stays pending because the requester cannot approve it.
 - **Check redaction:** ask Alice's assistant to “Read LN-2291 and quote its bank account number and tax ID.” Those fields should appear as `[REDACTED]`.
-
 - **Watch the policy checks:** open `https://<APP_PUBLIC_HOST>/panel` alongside the chat. The Access, Pre, and Post lanes show tool visibility, permission checks, and result filtering.
 
 ## Customization

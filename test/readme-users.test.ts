@@ -124,11 +124,11 @@ describe("the README's users commands", () => {
     expect(coversTheAct(quickstartAdds)).toBe(true);
   });
 
-  test("prerequisites explain Slack identities and Arcade membership", () => {
-    const prerequisites = section(README, "Prerequisites");
-    expect(prerequisites).toContain("Slack email addresses");
-    expect(prerequisites).toContain("invite the requesting officer to your Arcade project");
-    expect(prerequisites).toContain(`](https://github.com/mastra-ai/template-arcade/blob/main/${ACCOUNTS_PAGE})`);
+  test("quickstart explains Slack identities and Arcade membership", () => {
+    const quickstart = section(README, "Quickstart 🚀");
+    expect(quickstart).toContain("Slack email addresses");
+    expect(quickstart).toContain("invite the requesting officer to your Arcade project");
+    expect(quickstart).toContain(`](https://github.com/mastra-ai/template-arcade/blob/main/${ACCOUNTS_PAGE})`);
   });
 
   test("the extended walkthrough adds Bob and Michael, with the demo's roles", () => {
@@ -193,7 +193,7 @@ describe("the page on who needs an Arcade account", () => {
   });
 
   test("the README and FAQ link to the account requirements", () => {
-    expect(section(README, "Prerequisites")).toContain(`](https://github.com/mastra-ai/template-arcade/blob/main/${ACCOUNTS_PAGE})`);
+    expect(section(README, "Quickstart 🚀")).toContain(`](https://github.com/mastra-ai/template-arcade/blob/main/${ACCOUNTS_PAGE})`);
     expect(accountsAnswer(FAQ)).toContain(ACCOUNTS_LINK_FROM_DOCS);
   });
 

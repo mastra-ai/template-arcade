@@ -41,9 +41,9 @@ describe("template README", () => {
   });
 
   test("documents the required environment and the current Studio agent", () => {
-    expect(variables(section(README, "Prerequisites")).sort()).toEqual([
+    expect(variables(section(README, "Quickstart 🚀"))).toEqual(expect.arrayContaining([
       "ANTHROPIC_API_KEY", "APP_PUBLIC_HOST", "ARCADE_API_KEY",
-    ]);
+    ]));
     const known = new Set([...ENV.matchAll(/^#?\s*([A-Z][A-Z0-9_]*)=/gm)].map((match) => match[1]));
     expect(variables(README).filter((variable) => !known.has(variable))).toEqual([]);
     const agent = readFileSync(join(REPO, "lib/agent/agent.ts"), "utf8");
