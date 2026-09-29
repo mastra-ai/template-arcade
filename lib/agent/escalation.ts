@@ -136,8 +136,8 @@ export interface TurnClosure {
  * The turn's toolset, shut the moment the escalation succeeds.
  *
  * The wrapper on the escalation tool closes the turn **after** its own call
- * resolves, so the first escalation runs; every tool, including another escalation,
- * refuses once the turn is shut, before calling through. Both live inside
+ * resolves, so the escalation itself always runs; the wrapper on every other
+ * tool refuses once the turn is shut, before calling through. Both live inside
  * `execute`, which is the only place with no gap between "the escalation
  * returned" and "the model asked for something else" — a consumer reading a
  * stream is always one scheduling tick behind that.
@@ -174,30 +174,40 @@ export function closeTurnOnEscalation(
     }
     const call = executable.execute.bind(tool);
 
-    wrapped[name] = {
-      ...(tool as object),
-      async execute(...args: unknown[]) {
-        if (state.closed) {
-          refused.push(name);
-          options.onRefused?.(name);
-          // This is a turn boundary, not a policy denial from the gateway.
-          throw new Error(
-            `${name} was not called: this turn ended when the approval request was raised. ` +
-              `Nothing was refused and nothing was recorded — the turn resumes when the ` +
-              `approval is decided.`,
-          );
-        }
-        const result = await call(...args);
-        if (name === options.escalationTool) {
-          const requested = approvalRequested(result);
-          if (requested !== null && !state.closed) {
-            state.closed = true;
-            options.onClose?.(requested);
+    wrapped[name] =
+      name === options.escalationTool
+        ? {
+            ...(tool as object),
+            async execute(...args: unknown[]) {
+              const result = await call(...args);
+              const requested = approvalRequested(result);
+              if (requested !== null && !state.closed) {
+                state.closed = true;
+                options.onClose?.(requested);
+              }
+              return result;
+            },
           }
-        }
-        return result;
-      },
-    };
+        : {
+            ...(tool as object),
+            async execute(...args: unknown[]) {
+              if (state.closed) {
+                refused.push(name);
+                options.onRefused?.(name);
+                // Deliberately not a hook's words and deliberately not shaped
+                // like one: no `CHECK_FAILED`, no `[ref evt_…]`, nothing
+                // `isHookDecision` could mistake for a decision. This is the
+                // turn being over, said once, to a model that will not get to
+                // read it anyway because the turn is already ending.
+                throw new Error(
+                  `${name} was not called: this turn ended when the approval request was raised. ` +
+                    `Nothing was refused and nothing was recorded — the turn resumes when the ` +
+                    `approval is decided.`,
+                );
+              }
+              return call(...args);
+            },
+          };
   }
 
   return {

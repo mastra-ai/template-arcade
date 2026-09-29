@@ -60,7 +60,7 @@ You'll supply two API keys and a public hostname. Setup generates the remaining 
 
 7. **Open Studio**
    - Run `bun run studio` in another terminal. Open [Authorize Studio](http://localhost:4111/arcade/authorize) and sign in as Alice using her email and generated password. These links assume the default `STUDIO_PORT` of 4111.
-   - Open [Mastra Studio](http://localhost:4111), select **Loan Operations Assistant**, and send: “Approve loan LN-2291 for $95,000.”
+   - Open [Mastra Studio](http://localhost:4111), select **loan-operations**, and send: “Approve loan LN-2291 for $95,000.”
    - The first loan tool call may return an authorization link. Open it, sign in as the same Alice, grant access, and resend the prompt. This tool authorization is separate from authorizing Studio.
    - If Studio has no authorization link, open `https://<APP_PUBLIC_HOST>`, sign in as Alice, and choose **Authorize the gateway**. Ask the web chat to read LN-2291, follow its tool authorization card, and select **Continue**. Then retry in Studio.
    - Alice's $50,000 limit should block the approval and leave the loan pending. Follow any Slack authorization link as Alice, then resend the prompt. Charlie should receive an approval request by Slack DM from Alice's account, and the agent should stop to wait for his decision.
