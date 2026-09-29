@@ -67,10 +67,13 @@ See the [configuration docs](https://github.com/mastra-ai/template-arcade/blob/m
 
 ## Try it out
 
-- **Complete the approval:** Charlie opens the Slack link in a separate browser profile, signs in with his email and generated password, and approves. Resend the request in Studio; the single-use grant permits it. The web chat resumes automatically.
-- **Try self-approval:** before Charlie answers, open the approval link as Alice. The request stays pending because the requester cannot approve it.
-- **Check redaction:** ask Alice's assistant to “Read LN-2291 and quote its bank account number and tax ID.” Those fields should appear as `[REDACTED]`.
-- **Watch the policy checks:** open `https://<APP_PUBLIC_HOST>/panel` alongside the chat. The Access, Pre, and Post lanes show tool visibility, permission checks, and result filtering.
+- Open the Slack approval link in a separate browser profile and sign in as Charlie with his email and generated password. Approve the request, then resend it in Studio. The single-use grant lets Alice's approval go through. If you're using the web chat, it resumes automatically.
+
+- Before Charlie answers, open the approval link as Alice and try to approve your own request. It stays pending because the requester cannot also be the approver.
+
+- Ask Alice's assistant: “Read LN-2291 and quote its bank account number and tax ID.” Those fields should appear as `[REDACTED]` because they are filtered before the model sees them.
+
+- Open `https://<APP_PUBLIC_HOST>/panel` alongside the chat to watch the policy checks. The Access, Pre, and Post lanes show tool visibility, permission checks, and result filtering.
 
 ## Customization
 
