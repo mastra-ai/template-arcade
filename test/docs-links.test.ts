@@ -33,6 +33,12 @@ const PAGES = [
   ]),
 ].sort();
 
+const readPage = (page: string): string => {
+  const text = readFileSync(join(REPO, page), "utf8");
+  return page === "README.md"
+    ? text.replaceAll("https://github.com/mastra-ai/template-arcade/blob/main/", "./")
+    : text;
+};
 const relative = (markdown: string) => links(markdown).filter((target) => !/^(https?:|mailto:)/.test(target));
 
 describe("every relative link and anchor in the README and docs/ resolves", () => {
@@ -42,14 +48,14 @@ describe("every relative link and anchor in the README and docs/ resolves", () =
   });
 
   test("across all of them, there are links to check, anchors among them", () => {
-    const all = PAGES.flatMap((page) => relative(readFileSync(join(REPO, page), "utf8")));
+    const all = PAGES.flatMap((page) => relative(readPage(page)));
     expect(all.length).toBeGreaterThan(30);
     expect(all.filter((target) => target.includes("#")).length).toBeGreaterThan(5);
   });
 
   for (const page of PAGES) {
     test(page, () => {
-      expect(brokenRelativeLinks(readFileSync(join(REPO, page), "utf8"), join(REPO, page))).toEqual([]);
+      expect(brokenRelativeLinks(readPage(page), join(REPO, page))).toEqual([]);
     });
   }
 });

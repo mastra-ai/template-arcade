@@ -53,11 +53,14 @@ describe("template README", () => {
   });
 
   test("links to the full setup and keeps its dashboard fallback available", () => {
-    expect(links(README)).toContain("./docs/setup.md#quickstart-");
+    expect(links(README)).toContain("https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md#quickstart-");
     for (const phrase of ["fill in the User Source form", "fill in the gateway form", "Run `bun run setup-arcade <APP_PUBLIC_HOST>` again"]) {
       expect(SETUP).toContain(phrase);
     }
-    expect(brokenRelativeLinks(README, join(REPO, "README.md"))).toEqual([]);
+    // The website embeds this README, so repository links must work off GitHub too.
+    expect(links(README).filter((target) => target.startsWith("./"))).toEqual([]);
+    const localLinks = README.replaceAll("https://github.com/mastra-ai/template-arcade/blob/main/", "./");
+    expect(brokenRelativeLinks(localLinks, join(REPO, "README.md"))).toEqual([]);
     expect(brokenRelativeLinks(SETUP, join(REPO, "docs/setup.md"))).toEqual([]);
   });
 
