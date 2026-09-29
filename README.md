@@ -4,11 +4,11 @@ Enforce tool permissions, require human approval, and filter sensitive data for 
 
 ## Why we built this
 
-Alice asks the assistant to approve a $95,000 loan. Her limit is $50,000, so Charlie must approve the request first. Loans illustrate the broader problem: agents need enforceable limits on their actions.
+Alice can approve loans up to $50,000. When she asks the assistant to approve one for $95,000, it needs to get Charlie's approval first. We use a sample loan book so you can see what happens when an agent tries to do something its user isn't allowed to do.
 
-[Arcade](https://www.arcade.dev/) connects agents to tools and manages authorization. Mastra runs the assistant; Arcade invokes the app's checks to block unauthorized actions, hide unavailable tools, and filter sensitive results. The blocked loan request triggers a human approval request through Slack. These rules live outside the model's prompt.
+[Arcade](https://www.arcade.dev/) connects agents to tools and handles authorization. In this example, the Mastra assistant calls the loan tools through Arcade, which asks the app's policy code whether each call is allowed. Alice's request is blocked, and the assistant sends Charlie an approval request in Slack. The same setup hides tools a user can't access and removes sensitive fields before the model sees the results. The policy code enforces these rules outside the prompt.
 
-Mastra already provides [tool approvals](https://mastra.ai/docs/agents/human-in-the-loop) and [processors](https://mastra.ai/docs/agents/processors) for filtering inputs and outputs within your application. Arcade is useful when you want shared controls across agents: it manages each user's service authorization and enforces your policy checks at the tool gateway. Any agent using that gateway goes through the same checks, even if it uses a different framework. This template shows that shared enforcement approach.
+Mastra has built-in [tool approvals](https://mastra.ai/docs/agents/human-in-the-loop) and [processors](https://mastra.ai/docs/agents/processors) to check and filter data within your app. We use Arcade here to manage users' service authorization and keep permission checks in one place. If another agent uses the same Arcade gateway, it goes through the same checks, even if it's built with a different framework.
 
 ## Prerequisites
 
