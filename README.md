@@ -12,12 +12,12 @@ Mastra has built-in [tool approvals](https://mastra.ai/docs/agents/human-in-the-
 
 ## Prerequisites
 
-- **[Bun](https://bun.sh/docs/installation)**: runs the app and installs its dependencies.
-- **[uv](https://docs.astral.sh/uv/)**: a Python package manager used to install the Arcade CLI, which deploys this example's Python tools.
-- **[Anthropic API key](https://platform.claude.com/settings/keys)**: gives the assistant access to Claude.
-- **[Arcade project, API key, and CLI](https://docs.arcade.dev/en/references/arcade-cli)**: connect the assistant to its tools and authorization checks. The key and CLI must use the same Arcade project; Quickstart walks through this.
-- **[ngrok](https://ngrok.com/docs/universal-gateway/domains/) or a [hosted app](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md)**: provides a public HTTPS address so Arcade can reach the app's sign-in endpoints and policy checks. Another tunnel works too.
-- **[Slack workspace](https://docs.arcade.dev/en/references/auth-providers/slack) with two people**: one requests approval and the other approves. You'll need their Slack email addresses. With Arcade's built-in Slack app, the requester also needs membership in your Arcade project.
+- [Bun](https://bun.sh/docs/installation)
+- [uv](https://docs.astral.sh/uv/) - Python package manager used to install the Arcade CLI, which deploys this example's Python tools.
+- [Anthropic API key](https://platform.claude.com/settings/keys)
+- [Arcade project, API key, and CLI](https://docs.arcade.dev/en/references/arcade-cli) - The key and CLI must use the same Arcade project.
+- [ngrok](https://ngrok.com/docs/universal-gateway/domains/) or a [hosted app](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md) - Provides a public HTTPS address so Arcade can reach the app. Another tunnel works too.
+- [Slack workspace](https://docs.arcade.dev/en/references/auth-providers/slack) with two people - One requests approval and the other approves. You'll need their Slack email addresses. With Arcade's built-in Slack app, the requester also needs membership in your Arcade project.
 
 See the [configuration docs](https://github.com/mastra-ai/template-arcade/blob/main/docs/configuration.md) for advanced options.
 
