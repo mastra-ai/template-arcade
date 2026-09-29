@@ -1,6 +1,6 @@
 # Agent Action Governance with Arcade
 
-Enforce tool permissions, require human approval, and filter sensitive data for a Mastra agent, using a sample loan workflow.
+Ask a Mastra assistant to approve a sample loan. Arcade checks the user's permissions, blocks requests above their limit, and lets the assistant request human approval through Slack. Sensitive fields are filtered before the model sees them.
 
 ## Why we built this
 
@@ -12,21 +12,22 @@ Mastra has built-in [tool approvals](https://mastra.ai/docs/agents/human-in-the-
 
 ## Prerequisites
 
-- **[Anthropic API key](https://platform.claude.com/settings/keys)**: put your model key in `ANTHROPIC_API_KEY`.
-- **[Arcade project](https://api.arcade.dev/dashboard/api-keys)**: put its key in `ARCADE_API_KEY`. [Set up the Arcade CLI](./docs/setup.md#prerequisites) for that project. Its installer uses [uv](https://docs.astral.sh/uv/), a Python package manager, to install the command-line tool.
-- **[Public app address](./docs/deploying.md)**: set `APP_PUBLIC_HOST` to the app's HTTPS hostname, without `https://`. Arcade Cloud must reach the app. Use a hosted deployment or a local tunnel; ngrok is optional.
-- **[Slack accounts](https://docs.arcade.dev/en/references/auth-providers/slack)**: two people in one workspace, using their Slack email addresses. With Arcade's built-in Slack app, invite the requesting officer to your Arcade project. [Account details](./docs/app-users-and-arcade-accounts.md).
+- **[Anthropic API key](https://platform.claude.com/settings/keys)**: `ANTHROPIC_API_KEY`, the credential for the assistant's model.
+- **[Arcade project](https://api.arcade.dev/dashboard/api-keys)**: `ARCADE_API_KEY`, a key for the same project used by the [Arcade command-line tool](./docs/setup.md#prerequisites). Its installer uses [uv](https://docs.astral.sh/uv/), a Python package manager.
+- **[Public app address](./docs/deploying.md)**: `APP_PUBLIC_HOST`, the app's public hostname without `https://`. Arcade Cloud needs access to the app through a hosted deployment or a local tunnel; ngrok is optional.
+- **[Slack accounts](https://docs.arcade.dev/en/references/auth-providers/slack)**: two people in one workspace, using their Slack email addresses. Arcade's built-in Slack app requires you to invite the requesting officer to your Arcade project. [Account details](./docs/app-users-and-arcade-accounts.md).
 
-In `.env.example`, **fill in the first block** (two keys and a hostname), **leave the generated block blank**, and **keep optional defaults**. Setup fills the app secrets and sign-in configuration.
+The first block of `.env.example` holds your two keys and public hostname. Setup fills the generated block with app secrets and sign-in configuration. The optional settings have defaults.
 
 ## Quickstart 🚀
 
 1. **Create the project**
    - Run `npx create-mastra@latest --template https://github.com/mastra-ai/template-arcade --no-install`.
    - Choose `loan-approval-limits` as the project name, then run `cd loan-approval-limits` and `bun install`.
-2. **Add your API keys**
-   - Run `cp .env.example .env`. Fill in only the first block, using the values from Prerequisites.
+2. **Configure the app**
+   - Run `cp .env.example .env`. Fill in the first block from Prerequisites; leave the generated block blank and keep the optional defaults.
 3. **Connect Arcade**
+   - Complete the [Arcade account and command-line setup](./docs/setup.md#prerequisites).
    - Run `bun run setup-arcade <APP_PUBLIC_HOST>`, replacing the placeholder with your domain.
    - When prompted, run `bun run dev` through a tunnel, or [deploy the app](./docs/deploying.md) at your public hostname. Return to setup and press Enter.
    - Wait for confirmation that the gateway and policy hooks are active. [Dashboard fallback](./docs/setup.md#quickstart-).
@@ -35,7 +36,7 @@ In `.env.example`, **fill in the first block** (two keys and a hostname), **leav
    - Run `bun run users add <approver-email> --name Charlie --role vp_credit --clearance 250000`.
    - Save the printed passwords. Hosted apps need these commands run against their deployed databases.
 5. **Open Studio**
-   - Run `bun run studio`. Open [Authorize Studio](http://localhost:4111/arcade/authorize) and sign in as Alice (`STUDIO_PORT` defaults to 4111).
+   - Run `bun run studio`. Open [Authorize Studio](http://localhost:4111/arcade/authorize) and sign in as Alice. These links assume the default `STUDIO_PORT` of 4111; adjust them if you changed it.
    - Open [Mastra Studio](http://localhost:4111), select **Loan Operations Assistant**, and send: “Approve loan LN-2291 for $95,000.”
    - Follow the authorization links and resend the prompt. The request should be blocked and escalated to Charlie. [Authorization help](./docs/setup.md#quickstart-).
 
