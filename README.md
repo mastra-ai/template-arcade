@@ -8,6 +8,8 @@ Alice asks the assistant to approve a $95,000 loan. Her limit is $50,000, so Cha
 
 [Arcade](https://www.arcade.dev/) connects agents to tools and manages authorization. Mastra runs the assistant; Arcade invokes the app's checks to block unauthorized actions, hide unavailable tools, and filter sensitive results. The blocked loan request triggers a human approval request through Slack. These rules live outside the model's prompt.
 
+Mastra already provides [tool approvals](https://mastra.ai/docs/agents/human-in-the-loop) and [processors](https://mastra.ai/docs/agents/processors) for filtering inputs and outputs within your application. Arcade is useful when you want shared controls across agents: it manages each user's service authorization and enforces your policy checks at the tool gateway. Any agent using that gateway goes through the same checks, even if it uses a different framework. This template shows that shared enforcement approach.
+
 ## Prerequisites
 
 - **[Anthropic API key](https://platform.claude.com/settings/keys)**: put your model key in `ANTHROPIC_API_KEY`.
