@@ -1,18 +1,6 @@
 /**
- * The README's `bun run users` commands, run as written (#34).
- *
- * Since #33 nobody is seeded, so the Quickstart's "Add yourself and an
- * approver" step is the only way anybody can sign in, and Try it out adds Bob
- * and Michael the same way. A command there that the CLI refuses (a role the
- * policy does not know, a clearance it requires and the line leaves out) reads
- * exactly like one that works until somebody types it. So this reads the
- * commands out of the README, fills in the placeholders, and runs each one
- * against a scratch pair of databases, the way `app-test/users-cli.test.ts`
- * runs the command: `--no-env-file` and an allowlisted environment, so nothing
- * from this checkout's `.env` files reaches it.
- *
- * It also holds the step to the act it sets up: the loan officer's clearance
- * is under the $95K the Quickstart asks for, and the approver's covers it.
+ * Run the user-creation commands from the README and extended walkthrough
+ * against scratch databases. Their roles and limits must support the example.
  */
 import { afterAll, describe, expect, test } from "bun:test";
 import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
@@ -31,13 +19,12 @@ const ACCOUNTS_QUESTION = "Do my users need Arcade accounts?";
 
 /** Who needs an Arcade account, and why, moved out of the README into its own page (#55). */
 const ACCOUNTS_PAGE = "docs/app-users-and-arcade-accounts.md";
-const ACCOUNTS_LINK = `[\`${ACCOUNTS_PAGE}\`](./${ACCOUNTS_PAGE})`;
 /** The same page linked from `docs/faq.md`, its neighbour. */
 const ACCOUNTS_LINK_FROM_DOCS = "[`app-users-and-arcade-accounts.md`](./app-users-and-arcade-accounts.md)";
 const SLACK_PAGE = "https://docs.arcade.dev/en/references/auth-providers/slack";
 
-const ADD_STEP = "7. **Add yourself and an approver**";
-const ASK_STEP = "8. **Ask for the $95K approval**";
+const ADD_STEP = "4. **Add yourself and an approver**";
+const ASK_STEP = "5. **Open Studio**";
 
 const scratch = mkdtempSync(join(tmpdir(), "cg-readme-users-"));
 afterAll(() => rmSync(scratch, { recursive: true, force: true }));
@@ -74,13 +61,13 @@ function flag(argv: string[], name: string): string | undefined {
   return at === -1 ? undefined : argv[at + 1];
 }
 
-/** Whether the loan officer is refused the $95K and the approver may grant it: act 2, as step 7 sets it up. */
+/** Whether the loan officer is refused the $95K and the approver may grant it: act 2, as the user setup step sets it up. */
 function coversTheAct(commands: string[][]): boolean {
   const [officer, approver] = commands.map((argv) => Number(flag(argv, "clearance")));
   return officer! < 95_000 && approver! >= 95_000;
 }
 
-/** The README with step 7 moved after step 8, the order in which nobody can sign in. */
+/** The README with the user setup step moved after step 8, the order in which nobody can sign in. */
 function addStepAfterAsk(markdown: string): string {
   const start = markdown.indexOf(ADD_STEP);
   const ask = markdown.indexOf(ASK_STEP);
@@ -124,29 +111,27 @@ async function runAll(commands: string[][]): Promise<{ failures: string[]; list:
 describe("the README's users commands", () => {
   const step = addStep(README);
   const quickstartAdds = addCommands(step);
-  const tryItOutAdds = addCommands(section(README, "Try it out"));
+  const tryItOutAdds = addCommands(section(readFileSync(join(REPO, "docs/setup.md"), "utf8"), "Try it out"));
 
-  test("step 7 adds a loan officer and a VP, right before the app is opened", () => {
+  test("the user setup step adds a loan officer and a VP, right before the app is opened", () => {
     expect(step).not.toBe("");
     expect(quickstartAdds.map((argv) => flag(argv, "role"))).toEqual(["loan_officer", "vp_credit"]);
     const quickstart = section(README, "Quickstart 🚀");
-    expect(quickstart.indexOf(ADD_STEP)).toBeLessThan(quickstart.indexOf("Open `https://<APP_PUBLIC_HOST>`"));
+    expect(quickstart.indexOf(ADD_STEP)).toBeLessThan(quickstart.indexOf(ASK_STEP));
   });
 
   test("the loan officer's clearance is under $95K and the approver's covers it", () => {
     expect(coversTheAct(quickstartAdds)).toBe(true);
   });
 
-  test("step 7 says the approver's email is their Slack one, answers who needs an Arcade account, and offers seed-demo", () => {
-    expect(step).toContain("Use the email the approver's Slack account uses");
-    expect(step).toContain(
-      "   - Do your app's users need Arcade accounts? With Arcade's built-in Slack app, yes: invite each loan officer to your Arcade project's Members. " +
-        `With your own Slack app, no. See ${ACCOUNTS_LINK}.\n`,
-    );
-    expect(step).toContain("`bun run users seed-demo`");
+  test("prerequisites explain Slack identities and Arcade membership", () => {
+    const prerequisites = section(README, "Prerequisites");
+    expect(prerequisites).toContain("Slack email addresses");
+    expect(prerequisites).toContain("invite the requesting officer to your Arcade project");
+    expect(prerequisites).toContain(`](./${ACCOUNTS_PAGE})`);
   });
 
-  test("Try it out adds Bob and Michael, with the demo's roles", () => {
+  test("the extended walkthrough adds Bob and Michael, with the demo's roles", () => {
     expect(tryItOutAdds.map((argv) => [flag(argv, "name"), flag(argv, "role")])).toEqual([
       ["Bob", "credit_analyst"],
       ["Michael", "chief_credit_officer"],
@@ -185,7 +170,7 @@ describe("the FAQ the docs point at", () => {
 
   test("the README keeps no FAQ of its own, and links the page from Further reading", () => {
     expect(section(README, "FAQ")).toBe("");
-    expect(section(README, "Further reading")).toContain("[`docs/faq.md`](./docs/faq.md)");
+    expect(section(README, "Further reading")).toContain("](./docs/faq.md)");
   });
 });
 
@@ -207,8 +192,8 @@ describe("the page on who needs an Arcade account", () => {
     expect(accountsPageGaps(readFileSync(path, "utf8"))).toEqual([]);
   });
 
-  test("the README points at it from Prerequisites, step 7 and Further reading, and the FAQ from its answer", () => {
-    for (const title of ["Prerequisites", "Quickstart 🚀", "Further reading"]) expect(section(README, title)).toContain(ACCOUNTS_LINK);
+  test("the README and FAQ link to the account requirements", () => {
+    expect(section(README, "Prerequisites")).toContain(`](./${ACCOUNTS_PAGE})`);
     expect(accountsAnswer(FAQ)).toContain(ACCOUNTS_LINK_FROM_DOCS);
   });
 

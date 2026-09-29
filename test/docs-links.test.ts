@@ -28,6 +28,8 @@ const PAGES = [
     "docs/configuration.md",
     "docs/deploying.md",
     "docs/faq.md",
+    "docs/setup.md",
+    "docs/agent-design-history.md",
   ]),
 ].sort();
 

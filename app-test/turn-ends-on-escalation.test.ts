@@ -240,6 +240,31 @@ describe("the turn's toolset shuts when the escalation returns", () => {
     expect(closure.refused).toEqual(["Loan_ApproveLoan"]);
   });
 
+  test("a repeated escalation never creates another approval request", async () => {
+    const calls: string[] = [];
+    const refused: string[] = [];
+    let closures = 0;
+    const closure = closeTurnOnEscalation(
+      { [ESCALATION]: tool(ESCALATION, ESCALATION_RESULT, calls) },
+      {
+        escalationTool: ESCALATION,
+        onClose: () => { closures += 1; },
+        onRefused: (name) => { refused.push(name); },
+      },
+    );
+    const tools = closure.tools as Record<string, { execute: (input: unknown) => Promise<unknown> }>;
+
+    await tools[ESCALATION]!.execute({ resource_id: "LN-2291" });
+    await expect(tools[ESCALATION]!.execute({ resource_id: "LN-2291" })).rejects.toThrow(
+      /this turn ended when the approval request was raised/,
+    );
+
+    expect(calls).toEqual([`${ESCALATION}({"resource_id":"LN-2291"})`]);
+    expect(closures).toBe(1);
+    expect(closure.refused).toEqual([ESCALATION]);
+    expect(refused).toEqual([ESCALATION]);
+  });
+
   test("before the escalation, every tool calls through as it always did", async () => {
     const calls: string[] = [];
     const closure = closeTurnOnEscalation(
@@ -256,7 +281,7 @@ describe("the turn's toolset shuts when the escalation returns", () => {
     expect(calls).toEqual(['Loan_GetLoan({"loan_id":"LN-2291"})']);
   });
 
-  test("the escalation itself always runs, and its result is passed through unchanged", async () => {
+  test("the first escalation runs, and its result is passed through unchanged", async () => {
     const calls: string[] = [];
     const closure = closeTurnOnEscalation(
       { [ESCALATION]: tool(ESCALATION, ESCALATION_RESULT, calls) },
