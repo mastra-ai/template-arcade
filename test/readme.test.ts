@@ -13,7 +13,7 @@ const variables = (text: string) => [...new Set(text.match(/\b[A-Z][A-Z0-9]*(?:_
 describe("template README", () => {
   test("keeps the required sections in order, without a placeholder demo", () => {
     expect(headings(README).filter(({ level }) => level === 1).map(({ title }) => title)).toEqual([
-      "Loan Approval Limits with Arcade",
+      "Tool Authorization with Arcade",
     ]);
     expect(headings(README).filter(({ level }) => level === 2).map(({ title }) => title)).toEqual([
       "Why we built this", "Prerequisites", "Quickstart 🚀", "Try it out",

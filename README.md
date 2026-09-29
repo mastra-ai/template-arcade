@@ -1,4 +1,4 @@
-# Loan Approval Limits with Arcade
+# Tool Authorization with Arcade
 
 Ask a loan assistant to approve an application. Arcade checks the signed-in officer's authority, blocks requests above their limit, and routes them to an approver in Slack. After approval, the officer can retry using a single-use grant. A live panel records the decisions.
 
