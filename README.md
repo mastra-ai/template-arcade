@@ -22,29 +22,52 @@ The first block of `.env.example` holds your two keys and public hostname. Setup
 ## Quickstart 🚀
 
 1. **Create the project**
+   - Install [Bun](https://bun.sh/docs/installation) if needed. This app uses Bun's SQLite support and workspaces.
    - Run `npx create-mastra@latest --template https://github.com/mastra-ai/template-arcade --no-install`.
-   - Choose `loan-approval-limits` as the project name, then run `cd loan-approval-limits` and `bun install`.
-2. **Configure the app**
-   - Run `cp .env.example .env`. Fill in the first block from Prerequisites; leave the generated block blank and keep the optional defaults.
-3. **Connect Arcade**
-   - Complete the [Arcade account and command-line setup](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md#prerequisites).
-   - Run `bun run setup-arcade <APP_PUBLIC_HOST>`, replacing the placeholder with your domain.
-   - When prompted, run `bun run dev` through a tunnel, or [deploy the app](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md) at your public hostname. Return to setup and press Enter.
-   - Wait for confirmation that the gateway and policy hooks are active. [Dashboard fallback](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md#quickstart-).
-4. **Add yourself and an approver**
+   - Choose `loan-approval-limits` as the project name, then run `cd loan-approval-limits` and `bun install`. Keep `--no-install`: the default npm install cannot resolve this project's workspace dependencies.
+
+2. **Prepare the Arcade CLI**
+   - Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then run `uv tool install arcade-mcp`. The Arcade CLI deploys this example's Python toolkits.
+   - Run `arcade login`. Create a project in the Arcade dashboard and an API key in that project.
+   - Run `arcade project list`, then `arcade project set <project_id>`. If you have multiple organizations, run `arcade org set <org_id>` first, because switching organizations resets the active project.
+   - Run `arcade whoami` to confirm the CLI uses the same project as your API key.
+
+3. **Configure the app**
+   - Run `cp .env.example .env`. Fill in the first block from Prerequisites: your two API keys and public hostname, without `https://`.
+   - Leave the generated block blank and keep the optional defaults. Setup writes the app secrets and sign-in configuration for you.
+
+4. **Register the app with Arcade**
+   - Run `bun run setup-arcade <APP_PUBLIC_HOST>`, replacing the placeholder with your public hostname. Start setup before starting the app: it prepares the sign-in configuration first.
+   - Setup checks the Arcade project, generates the app configuration, registers authorization and policy hooks, and deploys the Loan and Approvals tools. Keep this terminal open when it asks you to start the app.
+   - To preview these actions first, add `--dry-run`. This prints the planned requests with secrets masked, without writing configuration or deploying tools.
+
+5. **Start the app and finish setup**
+   - In another terminal, run `bun run dev`. The app listens on `PORT`, which defaults to 3000.
+   - Make the app reachable over HTTPS at your public hostname. For local development, start your tunnel in a third terminal, pointing it at the app's port. Ngrok is optional; if you use it, the dev server prints the matching command. A [hosted deployment](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md) can supply the public address instead.
+   - Return to the setup terminal and press Enter. Setup checks that Arcade can reach the app, creates the User Source and gateway, then enables the policy hooks. Wait for confirmation that the hooks are active before trying the demo.
+   - If setup prints dashboard forms, create the User Source first, then the gateway using that source, then rerun `bun run setup-arcade <APP_PUBLIC_HOST>` to enable the hooks. Follow the printed values and the [dashboard fallback instructions](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md#quickstart-).
+
+6. **Add yourself and an approver**
+   - Use your real Slack email addresses in both commands. “Alice” and “Charlie” are display names for the walkthrough.
    - Run `bun run users add <your-email> --name Alice --role loan_officer --clearance 50000`.
    - Run `bun run users add <approver-email> --name Charlie --role vp_credit --clearance 250000`.
-   - Save the printed passwords. Hosted apps need these commands run against their deployed databases.
-5. **Open Studio**
-   - Run `bun run studio`. Open [Authorize Studio](http://localhost:4111/arcade/authorize) and sign in as Alice. These links assume the default `STUDIO_PORT` of 4111; adjust them if you changed it.
+   - Each command prints a password once. Save it: each person signs into the app with their email and this password. No users or passwords ship with the template, and adding users needs no restart.
+   - Run `bun run users list` to check their roles and limits. For a hosted app, run these commands against its deployed databases; see the [deployment guide](https://github.com/mastra-ai/template-arcade/blob/main/docs/deploying.md).
+
+7. **Open Studio**
+   - Run `bun run studio` in another terminal. Open [Authorize Studio](http://localhost:4111/arcade/authorize) and sign in as Alice using her email and generated password. These links assume the default `STUDIO_PORT` of 4111.
    - Open [Mastra Studio](http://localhost:4111), select **Loan Operations Assistant**, and send: “Approve loan LN-2291 for $95,000.”
-   - Follow the authorization links and resend the prompt. The request should be blocked and escalated to Charlie. [Authorization help](https://github.com/mastra-ai/template-arcade/blob/main/docs/setup.md#quickstart-).
+   - The first loan tool call may return an authorization link. Open it, sign in as the same Alice, grant access, and resend the prompt. This tool authorization is separate from authorizing Studio.
+   - If Studio has no authorization link, open `https://<APP_PUBLIC_HOST>`, sign in as Alice, and choose **Authorize the gateway**. Ask the web chat to read LN-2291, follow its tool authorization card, and select **Continue**. Then retry in Studio.
+   - Alice's $50,000 limit should block the approval and leave the loan pending. Follow any Slack authorization link as Alice, then resend the prompt. Charlie should receive an approval request by Slack DM from Alice's account, and the agent should stop to wait for his decision.
 
 ## Try it out
 
-- **Complete the approval:** Charlie opens the Slack link in a separate browser profile and approves. Resend the request in Studio; the single-use grant permits it.
+- **Complete the approval:** Charlie opens the Slack link in a separate browser profile, signs in with his email and generated password, and approves. Resend the request in Studio; the single-use grant permits it. The web chat resumes automatically.
 - **Try self-approval:** before Charlie answers, open the approval link as Alice. The request stays pending because the requester cannot approve it.
 - **Check redaction:** ask Alice's assistant to “Read LN-2291 and quote its bank account number and tax ID.” Those fields should appear as `[REDACTED]`.
+
+- **Watch the policy checks:** open `https://<APP_PUBLIC_HOST>/panel` alongside the chat. The Access, Pre, and Post lanes show tool visibility, permission checks, and result filtering.
 
 ## Customization
 

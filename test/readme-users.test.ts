@@ -23,8 +23,8 @@ const ACCOUNTS_PAGE = "docs/app-users-and-arcade-accounts.md";
 const ACCOUNTS_LINK_FROM_DOCS = "[`app-users-and-arcade-accounts.md`](./app-users-and-arcade-accounts.md)";
 const SLACK_PAGE = "https://docs.arcade.dev/en/references/auth-providers/slack";
 
-const ADD_STEP = "4. **Add yourself and an approver**";
-const ASK_STEP = "5. **Open Studio**";
+const ADD_STEP = "6. **Add yourself and an approver**";
+const ASK_STEP = "7. **Open Studio**";
 
 const scratch = mkdtempSync(join(tmpdir(), "cg-readme-users-"));
 afterAll(() => rmSync(scratch, { recursive: true, force: true }));
