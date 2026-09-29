@@ -1,12 +1,12 @@
 # Setup and approval walkthrough
 
-For the short path, start with the [README](../README.md). This guide covers Arcade account setup, dashboard fallbacks, and the complete approval flow.
+For the short path, start with the [README](../README.md). This guide uses ngrok for local development; a [hosted deployment](./deploying.md) can supply the public address instead. It covers Arcade account setup, dashboard fallbacks, and the complete approval flow.
 
 ## Prerequisites
 
 - **[Anthropic API key](https://platform.claude.com/settings/keys)**: set `ANTHROPIC_API_KEY`. The agent runs Claude Sonnet 5 at temperature 0.
 - **[Arcade project, key and CLI](https://docs.arcade.dev/en/references/arcade-cli)**: `bun run setup-arcade` registers everything in one Arcade project and runs `arcade deploy` into it, so the key and the Arcade CLI have to point at the same project. In this order:
-  1. Install the Arcade CLI: `uv tool install arcade-mcp`, as the [Arcade CLI reference](https://docs.arcade.dev/en/references/arcade-cli) describes.
+  1. Install [uv](https://docs.astral.sh/uv/), a Python package and command-line tool manager. It installs the Arcade CLI, which deploys this example's Python toolkits. Then install the Arcade CLI: `uv tool install arcade-mcp`, as the [Arcade CLI reference](https://docs.arcade.dev/en/references/arcade-cli) describes.
   2. Run `arcade login`.
   3. Create a project for this template in the Arcade dashboard ([Operate quickstart](https://docs.arcade.dev/en/operate/quickstart)).
   4. Create an API key in that project and set `ARCADE_API_KEY` to it ([Get an API key](https://docs.arcade.dev/en/get-started/setup/api-keys), or the dashboard's [API keys](https://api.arcade.dev/dashboard/api-keys) page).
