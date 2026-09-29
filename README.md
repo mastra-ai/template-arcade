@@ -90,4 +90,4 @@ See the [configuration docs](https://github.com/mastra-ai/template-arcade/blob/m
 
 ## About Mastra templates
 
-This partnership template was contributed by Arcade to show how Mastra and Arcade enforce loan approval limits on tool calls. [Contribute on GitHub](https://github.com/mastra-ai/template-arcade).
+This partnership template was contributed by Arcade to show how Mastra agents can use Arcade for tool access, authorization, and policy enforcement. [Contribute on GitHub](https://github.com/mastra-ai/template-arcade).
