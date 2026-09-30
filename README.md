@@ -10,6 +10,10 @@ Alice can approve loans up to $50,000. When she asks the assistant to approve on
 
 Mastra has built-in [tool approvals](https://mastra.ai/docs/agents/human-in-the-loop) and [processors](https://mastra.ai/docs/agents/processors) to check and filter data within your app. We use Arcade here to manage users' service authorization and keep permission checks in one place. If another agent uses the same Arcade gateway, it goes through the same checks, even if it's built with a different framework.
 
+## Demo
+
+<video controls width="640" height="360" src="https://res.cloudinary.com/mastra-assets/video/upload/v1790769141/mastra-template-quickstart_cqfngn.mp4"></video>
+
 ## Prerequisites
 
 - [Bun](https://bun.sh/docs/installation)

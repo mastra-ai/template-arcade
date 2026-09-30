@@ -16,7 +16,7 @@ describe("template README", () => {
       "Agent Action Governance with Arcade",
     ]);
     expect(headings(README).filter(({ level }) => level === 2).map(({ title }) => title)).toEqual([
-      "Why we built this", "Prerequisites", "Quickstart 🚀", "Try it out",
+      "Why we built this", "Demo", "Prerequisites", "Quickstart 🚀", "Try it out",
       "Customization", "Documentation", "About Mastra templates",
     ]);
     expect(README).not.toContain("CLOUDINARY_DEMO_VIDEO_URL_REQUIRED");
